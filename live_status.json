@@ -1,1 +1,18 @@
-{"updated": "2026-07-04T02:47:40.622860+00:00", "state": "準備中", "meta": {"symbol": "BTC/USDT", "timeframe": "1h", "strategy": "接続テスト"}, "bars_done": 0, "bars_max": 0, "last_bar": null, "equity": null, "position": null, "trades": []}
+{
+ "updated": "2026-07-04T02:48:02.255983+00:00",
+ "state": "稼働中",
+ "meta": {
+  "symbol": "BTC/USDT",
+  "timeframe": "1h",
+  "strategy": "BB12,k1.75（配管検証）"
+ },
+ "bars_done": 1,
+ "bars_max": 6,
+ "last_bar": {
+  "dt": "2026-07-04 01:00 UTC",
+  "close": 62471.49
+ },
+ "equity": 10000.0,
+ "position": null,
+ "trades": []
+}
