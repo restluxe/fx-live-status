@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-05T23:16:31.321752+00:00",
+ "updated": "2026-07-06T00:32:03.663810+00:00",
  "state": "稼働中",
  "meta": {
   "symbol": "BTC/USDT",
@@ -9,8 +9,8 @@
  "bars_done": 2,
  "bars_max": 6,
  "last_bar": {
-  "dt": "2026-07-05 22:00 UTC",
-  "close": 63732.01
+  "dt": "2026-07-05 23:00 UTC",
+  "close": 63636.0
  },
  "equity": 10000.0,
  "position": null,
