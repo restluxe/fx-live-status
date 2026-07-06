@@ -1,16 +1,16 @@
 {
- "updated": "2026-07-06T03:56:04.565775+00:00",
+ "updated": "2026-07-06T04:00:09.512517+00:00",
  "state": "稼働中",
  "meta": {
   "symbol": "BTC/USDT",
   "timeframe": "1h",
   "strategy": "BB12,k1.75（配管検証）"
  },
- "bars_done": 5,
+ "bars_done": 6,
  "bars_max": 6,
  "last_bar": {
-  "dt": "2026-07-06 02:00 UTC",
-  "close": 63484.96
+  "dt": "2026-07-06 03:00 UTC",
+  "close": 63294.0
  },
  "equity": 10000.0,
  "position": null,
