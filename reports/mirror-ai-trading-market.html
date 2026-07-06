@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自動売買 市場調査レポート | AI/非AI・対象選定・検証知見の総合分析</title>
+<style>
+  :root {
+    --bg: #0e1412;
+    --panel: #161d1a;
+    --panel2: #1b2420;
+    --border: #26312c;
+    --text: #e8efe9;
+    --text-dim: #8fa39a;
+    --accent: #4fd08c;
+    --accent2: #8fa39a;
+    --warn: #e2b04a;
+    --danger: #ef7a68;
+    --good: #4fd08c;
+    --mono: "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+  }
+  .back-link {
+    transition: opacity 0.2s;
+  }
+  .back-link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+  header.hero {
+    background: linear-gradient(135deg, #161d1a 0%, #0e1412 70%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 24px 48px;
+    text-align: center;
+  }
+  header.hero .eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    background: rgba(79,208,140,0.08);
+    border: 1px solid rgba(79,208,140,0.3);
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  header.hero h1 {
+    font-size: 2.2rem;
+    margin: 0 0 12px;
+    line-height: 1.4;
+    background: linear-gradient(90deg, #e8efe9, #8fa39a);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header.hero p.sub {
+    color: var(--text-dim);
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 15px;
+  }
+  header.hero .meta {
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  nav.toc {
+    max-width: 980px;
+    margin: -28px auto 40px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 28px;
+  }
+  nav.toc h2 {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+  nav.toc ol {
+    columns: 2;
+    -webkit-columns: 2;
+    gap: 24px;
+    margin: 0;
+    padding-left: 20px;
+  }
+  nav.toc li { margin-bottom: 8px; break-inside: avoid; }
+  nav.toc a { color: var(--text); text-decoration: none; font-size: 14.5px; }
+  nav.toc a:hover { color: var(--accent); }
+
+  section { margin: 56px 0; }
+  .section-tag {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(79,208,140,0.1);
+    border: 1px solid rgba(79,208,140,0.3);
+    padding: 3px 12px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-size: 1.55rem;
+    margin: 0 0 8px;
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+  }
+  h2 .num { color: var(--accent); margin-right: 8px; }
+  h3 {
+    font-size: 1.15rem;
+    margin: 32px 0 12px;
+    color: var(--text);
+  }
+  h4 {
+    font-size: 1rem;
+    margin: 20px 0 8px;
+    color: var(--accent);
+  }
+  p { margin: 10px 0; color: #d5d9e3; }
+  .lead {
+    color: var(--text-dim);
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+  ul, ol { padding-left: 22px; }
+  li { margin: 6px 0; color: #d5d9e3; }
+  a { color: var(--accent); }
+  a:hover { text-decoration: underline; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .card h4 { margin-top: 0; }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 720px) {
+    .grid2 { grid-template-columns: 1fr; }
+    nav.toc ol { columns: 1; }
+    header.hero h1 { font-size: 1.5rem; }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 14px;
+    background: var(--panel);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  thead th {
+    background: var(--panel2);
+    color: var(--accent);
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: #d5d9e3;
+  }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .table-scroll { overflow-x: auto; }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-right: 6px;
+    font-weight: 600;
+  }
+  .badge.ai { background: rgba(79,208,140,0.15); color: var(--accent); }
+  .badge.noai { background: rgba(79,208,140,0.15); color: var(--good); }
+  .badge.risk { background: rgba(239,122,104,0.15); color: var(--danger); }
+  .badge.warn { background: rgba(226,176,74,0.15); color: var(--warn); }
+
+  blockquote {
+    border-left: 3px solid var(--accent);
+    margin: 16px 0;
+    padding: 4px 20px;
+    color: var(--text-dim);
+    font-size: 14.5px;
+    background: rgba(79,208,140,0.05);
+    border-radius: 0 8px 8px 0;
+  }
+
+  .callout {
+    border: 1px solid rgba(226,176,74,0.4);
+    background: rgba(226,176,74,0.06);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  .callout.good {
+    border-color: rgba(79,208,140,0.4);
+    background: rgba(79,208,140,0.06);
+  }
+  .callout .callout-title {
+    font-weight: 700;
+    color: var(--warn);
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .callout.good .callout-title { color: var(--good); }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 48px 0;
+  }
+
+  footer {
+    margin-top: 80px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  footer .disclaimer {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  code {
+    font-family: var(--mono);
+    background: var(--panel2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+  }
+  .checklist li {
+    padding-left: 28px;
+    position: relative;
+    margin: 10px 0;
+  }
+  .checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--good);
+    font-weight: 700;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+  }
+  @media (max-width: 720px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .stat {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat .num {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat .label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap" style="padding: 12px 24px; display: flex; align-items: center; justify-content: flex-start; max-width: 980px; margin: 0 auto;">
+    <a href="../index.html" class="back-link" style="color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+      <span>←</span> テストネット監視ダッシュボードに戻る
+    </a>
+  </div>
+</header>
+
+<header class="hero">
+  <span class="eyebrow">MARKET RESEARCH REPORT</span>
+  <h1>自動売買 市場調査レポート<br>AI×非AI・対象選定・構築検証知見の総合分析</h1>
+  <p class="sub">cryptophysical.blog（AI自動売買のテストネット検証ログ）構築・運営のための市場調査。AIによる自動売買、AI以外の伝統的手法、トレード対象選定の評価軸、対象市場の実態、そして構築・検証に役立つ実践知見を、一次情報に基づき整理する。</p>
+  <div class="meta">作成日: 2026年7月7日　｜　投資助言を目的とするものではありません</div>
+</header>
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#s1">AIによる自動売買</a></li>
+    <li><a href="#s2">AI以外の自動売買</a></li>
+    <li><a href="#s3">トレード対象選択の優位性と評価軸</a></li>
+    <li><a href="#s4">自動売買の対象市場</a></li>
+    <li><a href="#s5">構築・検証に役立つ知見</a></li>
+    <li><a href="#s6">総合まとめ：cryptophysical.blogへの示唆</a></li>
+  </ol>
+</nav>
+
+<div class="wrap">
+
+  <!-- 免責文の追加 -->
+  <div class="callout" style="border-color: var(--warn); background: rgba(226, 176, 74, 0.04); margin-top: 0; margin-bottom: 32px;">
+    <div class="callout-title" style="color: var(--warn); font-size: 15px; margin-bottom: 8px; font-weight: bold;">【重要】免責事項・注意事項</div>
+    <p style="margin: 0; font-size: 14.5px; color: var(--text); line-height: 1.7;">
+      本レポートは市場調査および研究目的の資料です。<br>
+      投資助言ではありません。<br>
+      売買シグナルの提供ではありません。<br>
+      第三者資金の運用は行いません。<br>
+      実資金での運用を推奨するものではありません。
+    </p>
+  </div>
+
+<!-- ========== SECTION 1 ========== -->
+<section id="s1">
+  <span class="section-tag">SECTION 1</span>
+  <h2><span class="num">01</span>AIによる自動売買</h2>
+  <p class="lead">機械学習・深層学習・LLMエージェントを活用した自動売買サービスの全体像。クオンツファンドからリテール向けツール、2024〜2026年の新興LLMエージェント型まで、対応市場・AI活用方法・価格帯・強み弱みを整理する。</p>
+
+  <h3>1-1. クオンツ・ヘッジファンド系</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>サービス</th><th>対応市場</th><th>AI活用方法</th><th>参加条件</th><th>強み／弱み</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Renaissance Technologies</strong>（Medallion Fund）</td>
+        <td>株式・先物等マルチアセット</td>
+        <td>統計的パターン認識、高頻度統計的裁定</td>
+        <td>従業員限定、非公開</td>
+        <td>年平均約66%グロス/約39%ネット（1988-2018、<a href="https://www.bloomberg.com/news/articles/2019-11-12/the-unsolved-mystery-of-the-medallion-fund-s-success" target="_blank">Bloomberg</a>）／完全ブラックボックス、個人投資不可</td>
+      </tr>
+      <tr>
+        <td><strong>Two Sigma</strong></td>
+        <td>株式・先物等</td>
+        <td>ニューラルネット価格予測、強化学習、LLM基盤「Workbench」（<a href="https://www.twosigma.com/articles/ai-in-investment-management-2026-outlook-part-i/" target="_blank">Two Sigma</a>）</td>
+        <td>機関投資家向け、非公開</td>
+        <td>AIを業務全体に統合／個人利用不可</td>
+      </tr>
+      <tr>
+        <td><strong>Numerai</strong></td>
+        <td>グローバル株式（市場中立）</td>
+        <td>クラウドソース型MLモデルのメタモデル化（<a href="https://numer.ai/" target="_blank">Numerai公式</a>）</td>
+        <td>参加無料、NMRステークにリスクあり</td>
+        <td>モデル多様性による頑健性／ファンド直接投資は機関限定</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>1-2. リテール向け暗号資産自動売買ツール</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>サービス</th><th>主な機能</th><th>AI活用</th><th>価格帯</th><th>強み／弱み</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>3Commas</strong></td>
+        <td>DCA/Grid/Signalボット、バックテスト</td>
+        <td>AI Assistant（<a href="https://3commas.io/pricing" target="_blank">3Commas</a>）</td>
+        <td>月額15〜140ドル、カスタム223ドル〜</td>
+        <td>15+取引所対応／上位機能は高額プラン限定</td>
+      </tr>
+      <tr>
+        <td><strong>Cryptohopper</strong></td>
+        <td>戦略マーケットプレイス、ペーパートレード</td>
+        <td>AI Strategy Designer（<a href="https://tradingtoolshub.com/review/cryptohopper/" target="_blank">TradingToolsHub</a>）</td>
+        <td>無料〜月額129ドル</td>
+        <td>初心者にも配慮／AI機能は最上位プラン限定</td>
+      </tr>
+      <tr>
+        <td><strong>Pionex</strong></td>
+        <td>グリッドボット内蔵取引所</td>
+        <td>主にルールベース（<a href="https://www.pionex.com/" target="_blank">Pionex公式</a>）</td>
+        <td>手数料ベース、ボット無料</td>
+        <td>導入容易・低コスト／トレンド相場に弱い</td>
+      </tr>
+      <tr>
+        <td><strong>Trality</strong>（提供終了）</td>
+        <td>Pythonベース戦略構築</td>
+        <td>ルールベース＋一部ML</td>
+        <td>2023年サービス終了</td>
+        <td>事業継続性リスクの実例</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>1-3. リテール向け株式/FXプラットフォーム</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>サービス</th><th>主な機能</th><th>AI活用</th><th>価格帯</th><th>強み／弱み</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>TradeStation</strong></td>
+        <td>EasyLanguage戦略構築・ウォークフォワード最適化</td>
+        <td>LLMエージェント接続 MCP、AIチャット（<a href="https://www.tradestation.com/platforms-and-tools/mcp/" target="_blank">TradeStation MCP</a>）</td>
+        <td>株式ETF無料、他は個別課金</td>
+        <td>プロ向け検証機能／MCPは最終発注に人間確認必須</td>
+      </tr>
+      <tr>
+        <td><strong>Trade Ideas</strong>（Hollyアルゴリズム）</td>
+        <td>リアルタイムスキャン・アラート</td>
+        <td>過去パターンマッチング（<a href="https://volity.io/news/trade-ideas-ai-trading-tool-review/" target="_blank">Volity</a>）</td>
+        <td>月額118〜228ドル</td>
+        <td>監査済み実績開示／執行機能なし・株式限定</td>
+      </tr>
+      <tr>
+        <td><strong>Composer.trade</strong></td>
+        <td>ノーコード戦略構築・自動執行</td>
+        <td>AIによる戦略アイデア生成（<a href="https://www.composer.trade/pricing" target="_blank">Composer.trade</a>）</td>
+        <td>無料〜月額32ドル</td>
+        <td>無料でAI戦略生成可／暗号資産・FX非対応</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>1-4. LLMエージェント型・新興AIトレーディング（2024〜2026年）</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>プロジェクト</th><th>対応市場</th><th>AI活用方法</th><th>限界</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Autonolas / Fetch.ai</strong></td>
+        <td>DeFi、DAOトレジャリー</td>
+        <td>自律オンチェーンエージェント、スマートウォレット直接連携（<a href="https://www.cryptowisser.com/guides/ai-trading-agents-on-chain-autonomous-crypto-trading-2025/?lang=pt" target="_blank">Cryptowisser</a>）</td>
+        <td>スマートコントラクトリスク、規制未確立</td>
+      </tr>
+      <tr>
+        <td><strong>Virtuals Protocol</strong>（AIXBT等）</td>
+        <td>暗号資産（マルチチェーン）</td>
+        <td>マルチモーダルAI、市場センチメント分析（<a href="https://www.coingecko.com/en/coins/virtual-protocol" target="_blank">CoinGecko</a>）</td>
+        <td>投機的トークンエコノミーとの一体化</td>
+      </tr>
+      <tr>
+        <td><strong>TradingAgents / FinCon / FinMem</strong>（学術研究）</td>
+        <td>株式（シミュレーション）</td>
+        <td>役割分担型LLMマルチエージェント、階層型メモリ（<a href="https://arxiv.org/abs/2412.20138" target="_blank">arXiv:2412.20138</a>）</td>
+        <td>実運用実績・再現性の検証不足</td>
+      </tr>
+      <tr>
+        <td><strong>HedgeAgents</strong>（学術研究）</td>
+        <td>株式・暗号資産</td>
+        <td>バランス考慮型マルチエージェント</td>
+        <td>急落局面で約-20%の損失を報告（<a href="https://arxiv.org/abs/2502.13165" target="_blank">arXiv:2502.13165</a>）</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>1-5. 技術トレンド（2024〜2026年）</h3>
+  <p>77件の研究をレビューしたエビデンスマップ論文は、LLMトレーディングエージェントを「知覚→記憶→推論→行動・執行→リスク管理」のパイプラインとして整理している（<a href="https://arxiv.org/html/2605.19337v1" target="_blank">arXiv:2605.19337</a>）。</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>知覚のマルチモーダル化</h4>
+      <p>ニュース・SNS・チャート画像・音声を統合。FinBERT、FinGPT、BloombergGPT等が代表例（<a href="https://arxiv.org/html/2605.19337v1" target="_blank">arXiv</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>強化学習の活用拡大</h4>
+      <p>執行最適化（TWAP/VWAP学習版）、高頻度取引向けEarnHFT・MacroHFT等（<a href="https://arxiv.org/abs/2502.11433" target="_blank">FLAG-Trader</a>）。ただし不安定性が高い。</p>
+    </div>
+    <div class="card">
+      <h4>LLMエージェントの階層推論</h4>
+      <p>Chain-of-Thought、ReAct、モンテカルロ木探索など、秒〜時間単位の階層的推論設計（<a href="https://arxiv.org/html/2605.19337v1" target="_blank">arXiv</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>マルチエージェント高度化</h4>
+      <p>役割分担型・階層型・市場生態系型の3構造。バブルや暗黙の共謀等の創発現象リスクも指摘（<a href="https://arxiv.org/html/2605.19337v1" target="_blank">arXiv</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>オンチェーン実行への移行</h4>
+      <p>取引所APIを介さずスマートウォレットでDeFiプロトコルと直接連携（<a href="https://www.cryptowisser.com/guides/ai-trading-agents-on-chain-autonomous-crypto-trading-2025/?lang=pt" target="_blank">Cryptowisser</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>MCPによる既存プラットフォーム接続</h4>
+      <p>TradeStationがClaude/ChatGPTを取引口座に直結する機能をリリース（<a href="https://www.tradestation.com/platforms-and-tools/mcp/" target="_blank">TradeStation MCP</a>）。</p>
+    </div>
+  </div>
+
+  <h3>1-6. リスク・限界</h3>
+  <div class="callout">
+    <div class="callout-title">⚠ 過学習とバックテストの限界</div>
+    <p>19本の実証研究のうち、時系列を意識した学習・検証データ分割を明示したのはわずか2本（10.5%）、明示的な取引コストモデルを提示したのは1本（5.3%）のみ（<a href="https://arxiv.org/html/2605.19337v1" target="_blank">arXiv:2605.19337</a>）。査読済みは2本、最高水準の再現性を達成した研究は0本。</p>
+  </div>
+  <ul>
+    <li><strong>ブラックボックス性</strong>：複雑なモデルほど説明可能性が低下。日銀金融研究所も「人間の判断が介在しない場合」「根拠が理解困難な場合」の2つの法的論点を整理（<a href="https://www.imes.boj.or.jp/research/papers/japanese/kk38-2-1.pdf" target="_blank">日本銀行金融研究所</a>）。</li>
+    <li><strong>ハルシネーション</strong>：もっともらしいが誤った情報が検証前に取引を引き起こすリスク（<a href="https://arxiv.org/html/2605.19337v1" target="_blank">arXiv</a>）。</li>
+    <li><strong>レイテンシー・計算コスト</strong>：LLM推論は高頻度取引には遅すぎる速度・精度トレードオフが存在。</li>
+    <li><strong>マルチエージェント固有リスク</strong>：戦略の「クラウディング」、相関した資金流出、フラッシュクラッシュの可能性。</li>
+  </ul>
+
+  <h4>規制動向</h4>
+  <p><strong>米国</strong>：SECは2023年、AI予測データ分析利用時の利益相反対応を義務付ける規則案を提案（<a href="https://www.sec.gov/newsroom/press-releases/2023-140" target="_blank">SEC</a>）。</p>
+  <p><strong>日本</strong>：会員登録不要・単体機能の「売り切り型」EA販売は投資助言・代理業の登録不要とされる一方、継続課金＋ロジック更新提供の場合は該当し得る（<a href="https://www.kobe-sakigake.net/investment/entry203.html" target="_blank">神戸さきがけ法律事務所</a>、<a href="https://lfb.mof.go.jp/hokkaido/kinyu/jouhou/fx-attention.html" target="_blank">北海道財務局</a>）。自動売買のオン/オフを顧客が制御できない場合は「投資運用業」に該当する可能性も（<a href="https://taurus-financial.com/ea-systemtrade/" target="_blank">トーラス総合法務事務所</a>）。</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== SECTION 2 ========== -->
+<section id="s2">
+  <span class="section-tag">SECTION 2</span>
+  <h2><span class="num">02</span>AI以外の自動売買</h2>
+  <p class="lead">ルールベース、シグナル配信、グリッド/DCA、裁定取引、統計的アービトラージなど、機械学習を用いない伝統的な自動売買手法の全体像と、AIベース手法との構造的な違いを整理する。</p>
+
+  <h3>2-1. 手法別の比較</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>手法</th><th>代表例</th><th>対応市場</th><th>価格帯目安</th><th>強み／弱み</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>ルールベース／テクニカル指標型EA</td>
+        <td>MT4/MT5 EA（RSI・MACD・移動平均線、<a href="https://research.titanfx.com/ja/auto-trading/mql5-ea-auto-trading-mt5-guide" target="_blank">Titan FX</a>）</td>
+        <td>FX、CFD、株式、先物、一部暗号資産</td>
+        <td>無料〜数千ドル（<a href="https://www.mql5.com/ja/market/mt5/expert" target="_blank">MQL5マーケット</a>）</td>
+        <td>ロジック完全可視化・低コスト／レジーム変化に非適応</td>
+      </tr>
+      <tr>
+        <td>コピートレード／ミラートレーディング</td>
+        <td>MQL5シグナル、eToro CopyTrader、ZuluTrade（<a href="https://www.etoro.com/copytrader/how-it-works/" target="_blank">eToro</a>）</td>
+        <td>FX、株式、暗号資産、CFD</td>
+        <td>月額10〜50ドル、または成功報酬型</td>
+        <td>専門知識不要／コピー元依存、スリッページ乖離</td>
+      </tr>
+      <tr>
+        <td>グリッドトレード／DCAボット</td>
+        <td>Pionexグリッドボット、3Commas（<a href="https://www.pionex.com/blog/ja/%E3%82%B0%E3%83%AA%E3%83%83%E3%83%89%E5%8F%96%E5%BC%95%E3%83%9C%E3%83%83%E3%83%88/" target="_blank">Pionex</a>）</td>
+        <td>暗号資産（現物・先物）</td>
+        <td>月額15〜140ドル</td>
+        <td>レンジ相場で機械的利益／強トレンドで含み損拡大</td>
+      </tr>
+      <tr>
+        <td>裁定取引（アービトラージ）ボット</td>
+        <td>三角裁定bot、CEX-DEX裁定（<a href="https://scand.com/company/blog/how-to-build-a-triangular-arbitrage-bot-for-crypto-markets/" target="_blank">SCAND</a>）</td>
+        <td>暗号資産（CEX/DEX）</td>
+        <td>OSS無料〜商用ライセンス</td>
+        <td>理論上マーケットニュートラル／利幅縮小・レイテンシ競争</td>
+      </tr>
+      <tr>
+        <td>統計的アービトラージ・ペアトレード</td>
+        <td>共和分ベースのFXペアトレードEA</td>
+        <td>FX、株式</td>
+        <td>自作中心</td>
+        <td>マーケットニュートラル／共和分崩壊リスク</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>2-2. 歴史的背景</h3>
+  <p>アルゴリズム取引の起源は1970年代、NYSEの「DOT」システム（1976年）に遡る（<a href="https://scholarship.law.duke.edu/cgi/viewcontent.cgi?article=1211&context=dltr" target="_blank">Duke大学</a>）。1983年の「タートルズ実験」は機械的ルールに基づくトレンドフォロー思想の源流となった（<a href="https://www.ebc.com/jp/forex/274687.html" target="_blank">EBC Financial Group</a>）。2005年にMetaTrader 4（MT4）が正式リリースされ、MQL4により個人でもEA開発が可能になり、2016年には為替市場注文の80%超がアルゴリズム経由になったとされる（<a href="https://ea-exposition.com/media/metatrader-history/" target="_blank">EXPO blog</a>、<a href="https://app.hawkinsight.com/app/articleDetail?locales=zh_cns&id=64ec847462d6067c907ad3ac" target="_blank">Hawk Insight</a>）。2013年までに米国株式取引の約70%がアルゴリズム経由に（<a href="https://www.quantifiedstrategies.com/history-algorithmic-trading/" target="_blank">Quantified Strategies</a>）。2017年以降の暗号資産ブームでPionex・3Commas等のグリッドボットが個人向けに普及した。</p>
+
+  <h3>2-3. AIベース手法との比較</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>観点</th><th>ルールベース／非AI</th><th>AIベース（ML・深層学習）</th></tr></thead>
+    <tbody>
+      <tr><td>透明性</td><td>完全（コード上に明示、<a href="https://note.com/sukyatore_taro/n/na65ecae3c386" target="_blank">note</a>）</td><td>低い（ブラックボックス化しやすい）</td></tr>
+      <tr><td>再現性</td><td>高い（同一条件で同一判断）</td><td>学習データ・再学習頻度に依存し変動</td></tr>
+      <tr><td>過学習リスク</td><td>カーブフィッティングとして既知。パラメータ削減で対策可能</td><td>パラメータ数が膨大なため自由度が高く発生しやすい</td></tr>
+      <tr><td>パラメータ調整</td><td>人間が3〜6ヶ月に1回目安で手動調整</td><td>自律適応志向だが継続的MLOps運用が必要</td></tr>
+      <tr><td>開発・運用コスト</td><td>低い（無料〜数百ドル）</td><td>高い（データ・計算資源・専門知識）</td></tr>
+      <tr><td>市場適応力</td><td>適応しない（レジーム変化に弱い）</td><td>自律適応志向だが学習データの偏りに弱い</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout good">
+    <div class="callout-title">✓ 個人研究ブログ向けの示唆</div>
+    <ul>
+      <li>ルールが明示的なため、バックテストとフォワードテストの乖離要因を特定しやすい（<a href="https://www.oanda.jp/lab-education/ea_trading/beginner/overfitting_measures_backtest/" target="_blank">OANDA証券</a>）</li>
+      <li>最大ドローダウン等の明確な指標に基づく停止ルール（キルスイッチ）を設計しやすい</li>
+      <li>IS/OOS分割、ウォークフォワード分析など過学習対策が体系化されており再現可能</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== SECTION 3 ========== -->
+<section id="s3">
+  <span class="section-tag">SECTION 3</span>
+  <h2><span class="num">03</span>トレード対象選択の優位性と評価軸</h2>
+  <p class="lead">自動売買の成否は戦略ロジック以上に「何を対象にするか」で左右される。8つの評価軸、資産クラス別特性、クオンツの実際のスクリーニング手法、そして「エッジ（優位性）」概念そのものの分類を整理する。</p>
+
+  <h3>3-1. 8つの評価軸</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>① 流動性</h4>
+      <p>出来高・スプレッド・板の厚み。CME Groupは「板の厚みだけでなく実際の執行品質で流動性を測るべき」と指摘（<a href="https://www.cmegroup.com/ja/articles/2025/reassessing-liquidity-beyond-order-book-depth.html" target="_blank">CME Group</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>② ボラティリティ</h4>
+      <p>ATR（14期間が標準）、標準偏差、実現/インプライドボラティリティで定量化（<a href="https://en.wikipedia.org/wiki/Average_true_range" target="_blank">Wikipedia</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>③ 取引コスト</h4>
+      <p>スプレッド・手数料・スリッページ・資金調達率（Funding Rate、通常8時間±0.01〜0.05%、<a href="https://xtela.jp/articles/defi-perps-funding-rate-2026" target="_blank">xtela.jp</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>④ 市場効率性</h4>
+      <p>東証のHFT比率は注文件数ベースで約70%（<a href="https://www.fsa.go.jp/frtc/report/honbun/2022/20221025_SR_Article_HFT.pdf" target="_blank">金融庁</a>）。効率的な市場ほど単純ロジックの優位性は消滅しやすい。</p>
+    </div>
+    <div class="card">
+      <h4>⑤ 相関性</h4>
+      <p>BTC-Nasdaq100相関は2018年-0.13→2025年0.80超まで上昇。分散効果は近年低下（<a href="https://www.kucoin.com/ja/blog/fr-why-bitcoin-and-crypto-often-move-with-nasdaq" target="_blank">KuCoin</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>⑥ トレンド持続性 vs レンジ相性</h4>
+      <p>ADXでトレンド判定（40以上=強トレンド）。市場全体では約60%がレンジ、約40%がトレンドとの見解も（<a href="https://www.fujitomi.co.jp/stockfx/technical/80003/" target="_blank">フジトミ証券</a>）。</p>
+    </div>
+    <div class="card">
+      <h4>⑦ 取引時間帯</h4>
+      <p>暗号資産は24/365、FXは平日24時間、株式は立会時間のみ。無人稼働のリスク設計に直結。</p>
+    </div>
+    <div class="card">
+      <h4>⑧ レギュレーション・取引所信頼性</h4>
+      <p>2025年の暗号資産盗難総額は約170億ドル（<a href="https://coinpost.jp/?p=675795" target="_blank">CoinPost</a>）。Bybit（2025年、14〜15億ドル流出）等の事例あり。</p>
+    </div>
+  </div>
+
+  <h3>3-2. 資産クラス別特性比較</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>評価軸</th><th>暗号資産</th><th>FX</th><th>株式</th><th>先物・CFD</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>取引時間</td>
+        <td>24時間365日</td>
+        <td>平日ほぼ24時間</td>
+        <td>立会時間限定</td>
+        <td>CFDはほぼ24時間、先物はセッション制</td>
+      </tr>
+      <tr>
+        <td>ボラティリティ</td>
+        <td>非常に高い（BTC標準偏差はS&P500の約3〜5倍）</td>
+        <td>中程度</td>
+        <td>銘柄により大きく異なる</td>
+        <td>原資産連動＋レバレッジで増幅</td>
+      </tr>
+      <tr>
+        <td>アルゴ取引浸透度</td>
+        <td>取引所間裁定活発、個人参入余地あり</td>
+        <td>35〜58%程度</td>
+        <td>米国73〜76%、東証約70%（注文件数）</td>
+        <td>先物はHFT参入度高、CFDはOTC中心</td>
+      </tr>
+      <tr>
+        <td>取引所リスク</td>
+        <td>ハッキング・破綻リスク相対的に高い</td>
+        <td>分別管理・信託保全が一般的</td>
+        <td>証券保管振替機構による高い制度保護</td>
+        <td>ブローカーのカウンターパーティリスクに依存</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim)">出典：<a href="https://www.kucoin.com/ja/blog/fr-why-bitcoin-and-crypto-often-move-with-nasdaq" target="_blank">KuCoin</a>、<a href="https://papertradingjournal.com/2026/03/12/algorithmic-trading-statistics/" target="_blank">papertradingjournal.com</a>、<a href="https://www.fsa.go.jp/frtc/report/honbun/2022/20221025_SR_Article_HFT.pdf" target="_blank">金融庁</a></p>
+
+  <h3>3-3. エッジ（優位性）の5分類</h3>
+  <p>クオンツ実務解説では、エッジは「反復可能・検証可能・実行可能・持続的」の4条件を満たす優位性と定義される（<a href="https://www.quantitativo.com/p/informational-edge" target="_blank">Quantitativo</a>）。</p>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>エッジの種類</th><th>内容</th><th>自動売買での具体例</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge ai">情報優位</span></td><td>より良い/速い情報アクセス</td><td>オルタナティブデータ、決算NLP分析</td></tr>
+      <tr><td><span class="badge noai">分析優位</span></td><td>同じデータへの優れた分析力</td><td>独自の統計・MLモデル</td></tr>
+      <tr><td><span class="badge warn">行動優位</span></td><td>他者のパニック時の合理性維持</td><td>暴落時逆張り、感情非依存の自動執行</td></tr>
+      <tr><td><span class="badge risk">構造優位</span></td><td>低コスト・市場アクセス権</td><td>手数料の安い取引所利用</td></tr>
+      <tr><td>技術優位</td><td>優れたインフラ</td><td>低レイテンシーシステム</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <blockquote>個人開発者が現実的に狙えるのは、大資本を要する「技術優位」よりも、ニッチ市場を追う「情報優位」、独自ロジックを磨く「分析優位」、群集心理の歪みを突く「行動優位」であることが多い（<a href="https://www.quantitativo.com/p/informational-edge" target="_blank">Quantitativo</a>）。</blockquote>
+
+  <h3>3-4. 対象選定チェックリスト</h3>
+  <ul class="checklist">
+    <li>想定ロットが日次出来高に対して過大でないか</li>
+    <li>ATR・標準偏差はストップ幅・ロットサイズ設計と整合しているか</li>
+    <li>スプレッド・手数料・スリッページ・資金調達率を差し引いてもエッジが残るか</li>
+    <li>対象市場・時間帯のアルゴリズム浸透度は高すぎないか</li>
+    <li>他の運用対象・保有資産との相関が過度に集中していないか</li>
+    <li>戦略ロジックと対象の地合い（ADX等）が整合しているか</li>
+    <li>休場・ギャップ・無人稼働時のリスクに対応した停止条件があるか</li>
+    <li>利用する取引所・ブローカーの規制状況とセキュリティ実績を確認したか</li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== SECTION 4 ========== -->
+<section id="s4">
+  <span class="section-tag">SECTION 4</span>
+  <h2><span class="num">04</span>自動売買の対象市場</h2>
+  <p class="lead">暗号資産・FX・株式・先物/CFD・コモディティの比較、および暗号資産取引所のテストネット環境の具体的な仕様を整理する。</p>
+
+  <h3>4-1. 主要対象市場の比較</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>市場</th><th>市場規模の目安</th><th>24時間取引</th><th>個人の参入しやすさ</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>暗号資産現物</td>
+        <td>世界時価総額 約2.2〜2.3兆ドル（<a href="https://www.solcard.cc/blog/total-crypto-market-cap" target="_blank">SolCard</a>）</td>
+        <td>○ 365日</td>
+        <td>◎ 非常に容易</td>
+      </tr>
+      <tr>
+        <td>暗号資産デリバティブ（Perp）</td>
+        <td>2025年年間取引高 約85.7兆ドル（<a href="https://www.coinglass.com/learn/2025-annual-report-en" target="_blank">CoinGlass</a>）</td>
+        <td>○ 365日</td>
+        <td>◎ 容易（レバレッジ理解が前提）</td>
+      </tr>
+      <tr>
+        <td>FX</td>
+        <td>1日平均9.6兆ドル（<a href="https://www.bis.org/press/p250930.htm" target="_blank">BIS</a>）</td>
+        <td>○ 平日24時間</td>
+        <td>○ 容易</td>
+      </tr>
+      <tr>
+        <td>株式（现物・CFD）</td>
+        <td>世界時価総額 約166兆ドル（2026年6月）</td>
+        <td>× 立会時間のみ</td>
+        <td>△ 中程度</td>
+      </tr>
+      <tr>
+        <td>株価指数先物</td>
+        <td>世界の先物・OP出来高 年間137億枚超（<a href="https://www.fia.org/fia/articles/global-futures-and-options-volume-hits-record-137-billion-contracts-2023" target="_blank">FIA</a>）</td>
+        <td>△ ほぼ23時間</td>
+        <td>△ 中程度（証拠金要件高め）</td>
+      </tr>
+      <tr>
+        <td>コモディティ（金・原油）</td>
+        <td>金時価総額 約30〜31兆ドル（<a href="https://www.gold.org/goldhub/research/market-primer/gold-market-primer-market-size-and-structure" target="_blank">World Gold Council</a>）</td>
+        <td>△ ほぼ23時間</td>
+        <td>△ 中程度</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><span class="num">85.7兆$</span><span class="label">暗号資産デリバティブ2025年間取引高<br>（前年比+74%）</span></div>
+    <div class="stat"><span class="num">65〜80%</span><span class="label">暗号資産取引に占める<br>自動化（ボット）比率の業界推計</span></div>
+    <div class="stat"><span class="num">73%</span><span class="label">リテールのボット利用者のうち<br>バックテスト未実施の割合</span></div>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim)">出典：<a href="https://www.coinglass.com/learn/2025-annual-report-en" target="_blank">CoinGlass</a>、<a href="https://www.mexc.com/news/1031728" target="_blank">MEXC</a>、<a href="https://agentiveaiq.com/blog/do-trading-bots-really-work-the-ai-edge-in-finance/" target="_blank">AgentiveAIQ</a></p>
+
+  <h3>4-2. 主要取引所のテストネット/デモ環境比較</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>取引所</th><th>環境名</th><th>特徴</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Binance（現物）</td>
+        <td>Spot Testnet</td>
+        <td>GitHubログインでAPIキー発行、無料テスト資金付与（<a href="https://dev.binance.vision/t/low-volume-on-testnet/863" target="_blank">Binance Developer Community</a>）</td>
+      </tr>
+      <tr>
+        <td>Binance（先物）</td>
+        <td>Futures Demo Trading</td>
+        <td>Testnetから移行、本番同様UIで仮想資金取引（<a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info" target="_blank">Binance Developers</a>）</td>
+      </tr>
+      <tr>
+        <td>Bybit</td>
+        <td>Testnet／Demo Trading（2系統）</td>
+        <td>Testnetは新機能検証用、Demoは本番板情報＋仮想資金でより現実的（<a href="https://bybit-exchange.github.io/docs/v5/demo" target="_blank">Bybit API Docs</a>）</td>
+      </tr>
+      <tr>
+        <td>OKX</td>
+        <td>Demo Trading</td>
+        <td>本番アカウントで模擬取引に切替、ほぼ全REST/WSエンドポイント対応（<a href="https://www.okx.com/docs-v5/en/" target="_blank">OKX API Guide</a>）</td>
+      </tr>
+      <tr>
+        <td>Bitget</td>
+        <td>Demo Trading</td>
+        <td>本番同一エンドポイント＋ヘッダー切替、初期資金3,000 SUSDT（<a href="https://robottraders.io/blog/demo-trading-python-crypto-bot" target="_blank">Robot Traders</a>）</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">⚠ テストネットの構造的限界</div>
+    <ul>
+      <li><strong>板が極端に薄い</strong>：Binance Spot Testnetでは主要銘柄でも注文が数件しかないと報告（<a href="https://dev.binance.vision/t/low-volume-on-testnet/863" target="_blank">Binance Developer Community</a>）</li>
+      <li><strong>価格乖離</strong>：本番79,939〜84,199ドルに対しテストネットは17,784〜84,573ドルと異常変動した例あり</li>
+      <li><strong>TestnetとDemo Tradingは別物</strong>：Bybitは戦略検証にはDemo Tradingを推奨（<a href="https://www.bybit.com/en/help-center/article/FAQ-Demo-Trading" target="_blank">Bybit FAQ</a>）</li>
+      <li><strong>スリッページは別途モデル化が必要</strong>：BTC/ETHで0.05〜0.1%、上位100銘柄で0.3〜0.5%、マイクロキャップで5〜10%以上を保守的に見積もる（<a href="https://paybis.com/blog/how-to-backtest-crypto-bot/" target="_blank">Paybis</a>）</li>
+    </ul>
+  </div>
+
+  <p><strong>実務上の結論</strong>：テストネットは「API/コードレベルの検証」には適するが「戦略の収益性検証」には不向き。戦略検証は現実的なコストを織り込んだバックテストと、本番同居型のDemo Trading（Bybit/Bitget）や小額実弾でのステージング運用を組み合わせるのが実務的。</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== SECTION 5 ========== -->
+<section id="s5">
+  <span class="section-tag">SECTION 5</span>
+  <h2><span class="num">05</span>構築・検証に役立つ知見</h2>
+  <p class="lead">cryptophysical.blogの3原則（テストネット起点／停止条件先行設計／家計基盤の安定化）を踏まえた、バックテスト・リスク管理・ツール選定・情報発信の実践知見。</p>
+
+  <h3>5-1. バックテストの落とし穴</h3>
+  <p>IS/OOS「7:3分割」が実務的な目安とされ、IS期間でPF1.2以上・OOS期間でもPF1.1以上を確認できて初めて「本番候補」と考えられる（<a href="https://zenn.dev/ai_jidoka_lab/articles/zenn_bt_method_20260425" target="_blank">Zenn</a>）。個人開発者が49戦略をWalk-Forward分析で再検証した事例では、複数時間軸戦略が検証期間で取引数0件となり「即死」した例も報告されている（<a href="https://zenn.dev/maymay56/articles/backtest-vs-live-trading-gap" target="_blank">Zenn</a>）。
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>バイアス</th><th>内容</th><th>対策</th></tr></thead>
+    <tbody>
+      <tr><td>ルックアヘッド</td><td>未確定足・将来データの使用</td><td>確定済み足のみで判断</td></tr>
+      <tr><td>サバイバーシップ</td><td>上場廃止・倒産銘柄の無視</td><td>「消えた」資産も含む完全な履歴データ</td></tr>
+      <tr><td>選択バイアス</td><td>都合の良い期間のみ検証</td><td>サンプル内の全取引を含める</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim)">出典：<a href="https://trading.glass/en/academy/trading-intelligence/advanced-statistical-thinking/biases-in-backtesting" target="_blank">Trading Glass</a></p>
+
+  <div class="callout">
+    <div class="callout-title">⚠ バックテストと実運用のギャップ</div>
+    <p>複数情報源が一致して指摘：<strong>ライブ運用のリターンはバックテストの40〜70%程度に低下する</strong>のが経験則（<a href="https://stratbase.ai/en/blog/execution-gap-backtest-live" target="_blank">Stratbase.ai</a>）。主要因は約定価格差（-5〜-15%）、レイテンシ（-2〜-8%）、流動性（-3〜-20%）、心理要因（-10〜-30%）など。</p>
+  </div>
+
+  <p>暗号資産永久先物特有の見落としとして、<strong>ファンディングレートの見落とし</strong>が指摘されている。タイトな0.5%ストップで3日保有すると1Rに対して約18%ものファンディング負担になり得ると試算されている（<a href="https://rollbrains.com/quant/crypto-backtest-five-graveyards/" target="_blank">Rollbrains</a>）。</p>
+
+  <h3>5-2. リスク管理・停止条件設計</h3>
+  <p>最も広く採用されているのが<strong>「2%ルール」</strong>（1トレードの損失を口座資金の2%以内に抑える）で、「6%ルール」（月間損失6%到達で取引停止）とセットで運用される（<a href="https://www.gaitame.com/media/entry/2022/06/28/153829" target="_blank">外為どっとコム</a>、<a href="https://trade-alert.sarvest.jp/articles/fx-2percent-rule-guide" target="_blank">Trade Alert</a>）。</p>
+
+  <h4>5層の安全レイヤー（暗号資産Bot実装例）</h4>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>レイヤー</th><th>役割</th><th>主なチェック内容</th></tr></thead>
+    <tbody>
+      <tr><td>L1: 異常検知</td><td>市場異常時は取引しない</td><td>±5%以上の価格乖離、スプレッド5倍以上、API遅延5秒以上</td></tr>
+      <tr><td>L2: 注文前チェック</td><td>ルール違反時は発注しない</td><td>日次/週次損失上限、DD制限、連敗停止</td></tr>
+      <tr><td>L3: 実行制御</td><td>発注時の異常処理</td><td>タイムアウト・リトライ・約定確認</td></tr>
+      <tr><td>L4: ポジション管理</td><td>利確・損切りの実行</td><td>DCA戦略の利確%・損切り%</td></tr>
+      <tr><td>L5: 緊急停止</td><td>想定外損失拡大時にBot停止</td><td>日次損失が上限の150%超過等</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim)">出典：<a href="https://zenn.dev/ponfreelance/articles/7db5c71573fd0b" target="_blank">Zenn「暗号資産Botの『負けない設計』」</a></p>
+
+  <p>感情的な裁量介入を防ぐ仕組みとして、①<strong>物理的分離</strong>（サーバー上稼働でワンクリック停止不可）、②<strong>介入クールダウン</strong>（4時間待機＋理由記録）、③<strong>介入ログの記録</strong>（月次レビュー）の3点セットが提案されている（<a href="https://judyailab.com/en/posts/backtest-to-live-trading-gap/" target="_blank">Judy AI Lab</a>）。</p>
+
+  <h3>5-3. 実用ツール・フレームワーク</h3>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>フレームワーク</th><th>特徴</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Freqtrade</strong></td><td>暗号資産特化、GitHub Star 28,000超、Hyperopt内蔵、コミュニティ最大級</td></tr>
+      <tr><td><strong>Backtrader</strong></td><td>イベント駆動型、老舗（2015年〜）、ドキュメント充実</td></tr>
+      <tr><td><strong>vectorbt</strong></td><td>ベクトル化で極めて高速、ライブ取引非対応（研究用）</td></tr>
+      <tr><td><strong>QuantConnect (Lean)</strong></td><td>バックテストと実運用で同一コード、マルチアセット対応</td></tr>
+      <tr><td><strong>NautilusTrader</strong></td><td>Rustコア、新興、高速マッチングエンジン</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>ccxt</strong>（100以上の取引所を統一APIで扱えるOSSライブラリ）は個人開発の事実上の標準ツール。サンドボックス切替は<code>exchange.set_sandbox_mode(True)</code>で完結する統一設計（<a href="https://docs.ccxt.com" target="_blank">ccxt公式</a>）。</p>
+
+  <h4>推奨される検証パイプライン</h4>
+  <ol>
+    <li>アイデア定義（戦略仮説）</li>
+    <li>履歴データ収集（OHLC・板・約定）</li>
+    <li>バックテスト（手数料・スリッページ込み）</li>
+    <li>パラメータ最適化（Grid/Random/Hyperopt）</li>
+    <li>フォワードテスト（未使用データでの検証）</li>
+    <li>ペーパートレード（実口座に近い環境）</li>
+    <li>限定実運用（低資金・監視下）</li>
+  </ol>
+  <p style="font-size:13px;color:var(--text-dim)">出典：<a href="https://www.bitget.com/ja/wiki/1204880" target="_blank">Bitget</a></p>
+
+  <h3>5-4. 個人開発者の情報発信パターン</h3>
+  <p>Zenn・note・Qiitaでは、AI自動売買botの開発過程を発信する先行事例が豊富に確認できる（<a href="https://zenn.dev/iori_001/articles/crypto-bot-2man-yen" target="_blank">Zenn「元手2万円で仮想通貨自動売買Botを作った全記録」</a>等）。共通する発信パターン：</p>
+  <ol>
+    <li>開発の動機・戦略選定の思考過程を明示する</li>
+    <li>具体的な数値（元手、勝率、損益、DD）を包み隠さず公開する</li>
+    <li>失敗・損失も含めて記録する</li>
+    <li>リスク管理の実装をコードレベルで開示する</li>
+    <li>無料記事で概要を届け、詳細ログは有料note等で販売する二段構え</li>
+    <li>SNSでリアルタイム実況、詳細分析は長文記事へ誘導</li>
+  </ol>
+
+  <h3>5-5. 日本の規制・コンプライアンス</h3>
+  <div class="callout good">
+    <div class="callout-title">2026年の法改正動向</div>
+    <p>2026年4月10日、金融庁は暗号資産規制を資金決済法から<strong>金融商品取引法へ移管する</strong>改正法案を国会に提出（<a href="https://www.fsa.go.jp/common/diet/221/02/03.pdf" target="_blank">金融庁</a>）。無登録業者への罰則は拘禁刑上限3年→<strong>10年</strong>、罰金上限300万円→<strong>1,000万円</strong>に引き上げ。<strong>ステルスマーケティング規制</strong>も新設され、対価を受けて投資判断の意見を表示する場合は表示義務が生じる（<a href="https://innovationlaw.jp/crypto-fiea-amendment-2026/" target="_blank">森・濱田松本法律事務所</a>）。</p>
+  </div>
+  <p>個人が自己資金で自動売買を行うこと自体（自己勘定取引）は暗号資産交換業には該当しない（<a href="https://www.fsa.go.jp/policy/virtual_currency/index.html" target="_blank">金融庁</a>）。ただし発信時に「必ず儲かる」等の断定的表現を用いることは金商法上の禁止規定に抵触するリスクがある。</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ========== SECTION 6 ========== -->
+<section id="s6">
+  <span class="section-tag">SUMMARY</span>
+  <h2><span class="num">06</span>総合まとめ：cryptophysical.blogへの示唆</h2>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>3原則</th><th>本調査で裏付けられた実践知見</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>① テストネットから始める</td>
+        <td>Binance/Bybitのtestnetとccxtを組み合わせた検証フロー、DRY_RUN→1 USDT→10 USDT→段階投入という漸進的な実弾移行プロセスが個人開発の定石。ただしテストネットは板が薄いため「API検証用」と割り切り、戦略の収益性検証は現実的コストを織り込んだバックテストで補う。</td>
+      </tr>
+      <tr>
+        <td>② 止め方を先に設計する</td>
+        <td>「5層の安全レイヤー」のような具体的な緊急停止アーキテクチャ、物理的分離・介入クールダウン・ログ記録の3点セット、2%/6%ルールに基づく資金管理が実務的な雛形になる。</td>
+      </tr>
+      <tr>
+        <td>③ 実弾投入より先に家計基盤を安定させる</td>
+        <td>先行事例が示す「失っても生活に支障のない金額」からの少額運用、そして日本の規制動向（2026年金商法改正）を踏まえた「利益を保証しない」慎重な情報発信の必要性。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">構築・発信における差別化ポイント</div>
+    <p>調査で判明した重要な事実として、リテールのボット利用者の<strong>73%がバックテストを一度も行っていない</strong>（<a href="https://agentiveaiq.com/blog/do-trading-bots-really-work-the-ai-edge-in-finance/" target="_blank">AgentiveAIQ</a>）。バックテスト・停止条件設計・資金管理を重視するcryptophysical.blogのアプローチ自体が、平均的な市場参加者との明確な差別化要因になり得る。</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="disclaimer">
+      <strong>【免責事項】</strong><br>
+      本レポートは市場調査および研究目的の資料です。<br>
+      投資助言ではありません。<br>
+      売買シグナルの提供ではありません。<br>
+      第三者資金の運用は行いません。<br>
+      実資金での運用を推奨するものではありません。<br>
+      <br>
+      本レポートは技術動向・市場調査を目的としたものであり、特定の金融商品・サービスの利用を推奨または勧誘するものではありません。記載されている実績・数値・市場規模は公開情報（2026年7月時点）に基づくものであり、将来の運用成果を保証するものではありません。自動売買システムの構築・運用にあたっては、各国・地域の金融規制を必ず確認し、十分なリスク管理のもとで自己責任にて実施してください。
+    </div>
+    <p>本レポートは5つの調査領域（AI自動売買／非AI自動売買／トレード対象評価軸／対象市場／構築検証知見）についてWeb上の一次情報を収集・統合して作成されました。各セクション内のリンクが個別の出典です。</p>
+  </div>
+</footer>
+
+</body>
+</html>
