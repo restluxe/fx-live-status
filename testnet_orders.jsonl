@@ -1,2 +1,4 @@
 {"ts": "2026-07-13T15:29:06.905580+00:00", "event": "orphan_position_detected", "symbol": "BTC/USDT", "suspected": false, "log_open": false, "base": "BTC", "base_free": 1.05}
 {"ts": "2026-07-13T15:29:06.905986+00:00", "event": "final_decision", "symbol": "BTC/USDT", "operation": "startup", "decision": "proceed"}
+{"ts": "2026-07-13T15:29:21.932623+00:00", "event": "orphan_position_detected", "symbol": "BTC/USDT", "suspected": false, "log_open": false, "base": "BTC", "base_free": 1.05}
+{"ts": "2026-07-13T15:29:21.932905+00:00", "event": "final_decision", "symbol": "BTC/USDT", "operation": "startup", "decision": "proceed"}
