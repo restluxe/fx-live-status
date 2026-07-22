@@ -1,10 +1,10 @@
 {
-  "status": "Idle",
-  "last_processed_candle": "2026-07-21T22:00:00+00:00",
-  "gap_detected": false,
-  "missed_bars_estimate": 0,
-  "consecutive_failures": 0,
-  "last_error_category": null,
+  "status": "Running",
+  "last_processed_candle": "2026-07-22T05:00:00+00:00",
+  "gap_detected": true,
+  "missed_bars_estimate": 2,
+  "consecutive_failures": 1,
+  "last_error_category": "RuntimeError",
   "stop_condition_triggered": false,
   "live_funds": false
 }
