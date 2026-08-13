@@ -3,8 +3,8 @@
   "last_processed_candle": "2026-08-13T04:00:00+00:00",
   "gap_detected": false,
   "missed_bars_estimate": 0,
-  "consecutive_failures": 0,
-  "last_error_category": null,
+  "consecutive_failures": 1,
+  "last_error_category": "RuntimeError",
   "stop_condition_triggered": false,
   "live_funds": false
 }
