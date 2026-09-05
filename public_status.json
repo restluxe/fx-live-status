@@ -1,5 +1,5 @@
 {
-  "status": "Running",
+  "status": "Idle",
   "last_processed_candle": "2026-09-04T23:00:00+00:00",
   "gap_detected": true,
   "missed_bars_estimate": 2,
