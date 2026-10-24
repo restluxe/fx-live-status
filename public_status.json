@@ -1,9 +1,9 @@
 {
-  "status": "Error",
+  "status": "Idle",
   "last_processed_candle": "2026-10-24T12:00:00+00:00",
   "gap_detected": false,
   "missed_bars_estimate": 0,
-  "consecutive_failures": 1,
+  "consecutive_failures": 3,
   "last_error_category": "RuntimeError",
   "stop_condition_triggered": false,
   "live_funds": false
